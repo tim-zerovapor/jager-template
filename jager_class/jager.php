@@ -83,13 +83,18 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 
 			$templateFile = $this->dirRoot.$file;
 
-			if(file_exists($templateFile) && is_readable($templateFile)){
-				$path = $templateFile;
+			try{
+				if(file_exists($templateFile) && is_readable($templateFile)){
+					$path = $templateFile;
+				}
+				else{
+					throw new \Exception("Template <strong>\"$file\"</strong> file not found.");
+				}
 			}
-			else{
-				throw new Exception('Template file not found.');
+			catch(Exception $e){
+				
+				$this->_showException($e->getMessage());
 			}
-
 			return $path;
 		}
 
@@ -161,10 +166,19 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 
 
 
-		function see($elm){
+		private function see($elm){
 			echo "<pre>";
 			print_r($elm);
 			echo "</pre>";
+		}
+
+		private function _showException($message){
+
+		echo	"<div style=\"margin: 10px auto; width: 960px; padding: 8px 35px 8px 14px;color: #C09853;background-color: #FCF8E3;border: 1px solid #FBEED5;\">";
+        echo       "<h4 style=\"margin:0px;font-size:17.5px\">Warning!</h4>";
+        echo      "<p style=\"margin: 0 0 10px;\">$message</p>";
+		echo	"</div>";
+
 		}
 
 	}
