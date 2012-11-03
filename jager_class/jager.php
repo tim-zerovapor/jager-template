@@ -107,6 +107,10 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 				return  $template;
 		}
 
+		/**
+		* Parse our template file 
+		* replace any template vars with their value.
+		*/
 		private function _parseTemplate(){
 
 			 // Create an alias of the template file property to save space
@@ -116,6 +120,7 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 	        $comment_pattern = array('#/\*.*?\*/#s', '#(?<!:)//.*#');
 	        $template = preg_replace($comment_pattern, NULL, $template);
 
+	        // first include anyfiles that need to be included.
 	        $template = str_get_html($template);
 	        $template = $this->_getincludes($template);
 
@@ -125,12 +130,11 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 
 
 
-
-
-
-
+		/**
+		* Checks the template for any includes and brings them into the the main tempalte
+		*@var obj
+		*/
 		private function _getincludes($html){
-
 
 			$selector = '*[data-jager=true]';
 			$nth = 0;
@@ -140,16 +144,18 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 
 			      if($this->fileExistsCheck( $this->dirRoot.$file)){
 			      		$content = file_get_contents( $this->dirRoot.$file);
+			      		//todo 
+			      		//consider parsing these includes before adding them to the dom
 			      		$html->find($selector,$nth)->innertext = $content;
 			      }
 			      
 			      $nth++;
+			      //todo 
+			      //fix this nasty shit wtf wont it remove..
 			      // $e->removeAttribute("data-jager");
 			  	  $e->removeAttribute("data-include");
 			  }
 
-			  
-			  
 			  return $html;
 		}
 
