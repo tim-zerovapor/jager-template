@@ -11,7 +11,7 @@ Jager Template Engine
 
 // your parsed markup
 <footer>
- <div>@copy 2012 mysite.com</div>
+ <div>&copy; 2012 mysite.com</div>
  <ul>
  	<li><a href="#">some linke</a></li>
  	<li><a href="#">some linke</a></li>
