@@ -128,7 +128,7 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 	        // first include anyfiles that need to be included.
 	        $template = str_get_html($template);
 	        $template = $this->_getincludes($template);
-	        $template = $this->__replaceVars($template);
+	        $template = $this->_replaceVars($template);
 
 	        // $this->see($template);
 	         return $template;
@@ -167,7 +167,7 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 			  return $html;
 		}
 
-		private function __replaceVars($html){
+		private function _replaceVars($html){
 			$html = str_get_html($html);
 			$selector = '*[data-jager-var]';
 			$nth = 0; 
