@@ -6,8 +6,9 @@ Jager Template Engine
 <p>Example ::</p>
 
 ```
+// Include Example
 // your markup
-<footer data-jager="true" data-include="footercontent.html"></div>
+<footer  data-jager-include="footercontent.html"></div>
 
 // your parsed markup
 <footer>
@@ -18,5 +19,13 @@ Jager Template Engine
  	<li><a href="#">some linke</a></li>
  </ul>
 </footer>
+
+
+// Single var
+
+<title data-jager-var="pagetitle">Place Holder Title</title>
+
+//after parsing
+<title>Homepage</title>
 
 ```

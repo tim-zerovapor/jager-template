@@ -23,10 +23,13 @@ use Jager\Template\Engine as Engine;
 
 $jager = new Engine;
 
+$jager->data['pagetitle'] = "This is my page title woot";
+
+
 echo  $jager->view("template.html");
 
 
 // just some more time sutff 
 $time_end = microtime_float();
 $time = $time_end - $time_start;
-echo "Did nothing in $time seconds and used ".convert(memory_get_usage(true));
+echo "Executed in $time seconds and used ".convert(memory_get_usage(true));

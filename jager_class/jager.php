@@ -43,7 +43,7 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 		* Stores the entries to be parsed into the template
 		* @var array
 		*/
-		public $entries = array();
+		public $data = array();
 
 
 		public function __construct($templateRoot = null){
@@ -128,6 +128,7 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 	        // first include anyfiles that need to be included.
 	        $template = str_get_html($template);
 	        $template = $this->_getincludes($template);
+	        $template = $this->__replaceVars($template);
 
 	        // $this->see($template);
 	         return $template;
@@ -141,11 +142,11 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 		*/
 		private function _getincludes($html){
 
-			$selector = '*[data-jager=true]';
+			$selector = '*[data-jager-include]';
 			$nth = 0;
 
 			foreach($html->find($selector) as $e){
-			      $file = $e->attr['data-include'];
+			      $file = $e->attr['data-jager-include'];
 
 			      if($this->fileExistsCheck( $this->dirRoot.$file)){
 			      		$content = file_get_contents( $this->dirRoot.$file);
@@ -155,29 +156,47 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 			      }
 			      
 			      $nth++;
-			      //todo 
-			      //fix this nasty shit wtf wont it remove..
-			      // $e->removeAttribute("data-jager");
-			  	  $e->removeAttribute("data-include");
+			  	  // todo 
+			  	  // removal of jager tags.
+			  	  // $e->removeAttribute('data-jager-include');
+			  	  $e->attr['data-jager-include']="";
+			  	  
 			  }
+
 
 			  return $html;
 		}
 
+		private function __replaceVars($html){
+			$html = str_get_html($html);
+			$selector = '*[data-jager-var]';
+			$nth = 0; 
 
+			foreach($html->find($selector) as $e){
+				$var = $e->attr['data-jager-var'];
+				$html->find($selector,$nth)->innertext = $this->data[$var];
+			}
 
+			return $html;
+
+		}
+
+		//todo 
+		// remove this 
+		// just used for dumping shit in a readible fashion
 		private function see($elm){
 			echo "<pre>";
 			print_r($elm);
 			echo "</pre>";
 		}
 
+		// show usefull exceptions rather than just small text on a screen.
 		private function _showException($message){
 
-		echo	"<div style=\"margin: 10px auto; width: 960px; padding: 8px 35px 8px 14px;color: #C09853;background-color: #FCF8E3;border: 1px solid #FBEED5;\">";
-        echo       "<h4 style=\"margin:0px;font-size:17.5px\">Warning!</h4>";
-        echo      "<p style=\"margin: 0 0 10px;\">$message</p>";
-		echo	"</div>";
+			echo	"<div style=\"margin: 10px auto; width: 960px; padding: 8px 35px 8px 14px;color: #C09853;background-color: #FCF8E3;border: 1px solid #FBEED5;\">";
+	        echo       "<h4 style=\"margin:0px;font-size:17.5px\">Warning!</h4>";
+	        echo      "<p style=\"margin: 0 0 10px;\">$message</p>";
+			echo	"</div>";
 
 		}
 
