@@ -23,7 +23,23 @@ use Jager\Template\Engine as Engine;
 
 $jager = new Engine;
 
-$jager->data['pagetitle'] = "This is my page title woot";
+$jager->data['pagetitle'] = "Home | Jager Template Engine";
+
+
+$jager->data['entries'] = array(
+			array(
+				'title'=>'Entry 1',
+				'description' => "This is a fake description.1"
+				),
+			array(
+				'title'=>'Entry 2',
+				'description' => "This is a fake description.2"
+				),
+			array(
+				'title'=>'Entry 2',
+				'description' => "This is a fake description.3"
+				)
+	);
 
 
 echo  $jager->view("template.html");

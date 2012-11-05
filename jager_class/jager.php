@@ -120,15 +120,13 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 
 			 // Create an alias of the template file property to save space
 	        $template = $this->_template;
-	 
-	        // Remove any PHP-style comments from the template
-	        $comment_pattern = array('#/\*.*?\*/#s', '#(?<!:)//.*#');
-	        $template = preg_replace($comment_pattern, NULL, $template);
 
 	        // first include anyfiles that need to be included.
 	        $template = str_get_html($template);
 	        $template = $this->_getincludes($template);
-	        $template = $this->_replaceVars($template);
+
+	        $template = $this->_replaceVars($template);// make sure this is last
+	        $template = $this->_foreach($template);// make sure this is last
 
 	        // $this->see($template);
 	         return $template;
@@ -178,16 +176,30 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 			}
 
 			return $html;
-
 		}
 
-		//todo 
-		// remove this 
-		// just used for dumping shit in a readible fashion
-		private function see($elm){
-			echo "<pre>";
-			print_r($elm);
-			echo "</pre>";
+		private function _foreach($html){
+			$selector = '*[data-jager-foreach]';
+			$nth = 0;
+			$temp_data; // holds temp template data.
+			
+
+			// get each foreach loop in the dom
+			foreach($html->find($selector) as $e){
+				$array = $e->attr['data-jager-foreach'];// get our array name
+				$data  = $this->data[$array]; // get our array of data
+				$tempTemplate = $e->innertext;
+
+				$pattern='\\{\\{[^{,},}]+\\}\\}';
+
+				$vars = array();
+				// preg_match_all($pattern, $tempTemplate,$vars);
+				preg_match_all ("/".$pattern."/is", $tempTemplate, $vars);
+
+				$this->see($vars);
+			}
+
+			return $html;
 		}
 
 		// show usefull exceptions rather than just small text on a screen.
@@ -197,7 +209,15 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 	        echo       "<h4 style=\"margin:0px;font-size:17.5px\">Warning!</h4>";
 	        echo      "<p style=\"margin: 0 0 10px;\">$message</p>";
 			echo	"</div>";
+		}
 
+		//todo 
+		// remove this 
+		// just used for dumping shit in a readible fashion
+		private function see($elm){
+			echo "<pre>";
+			print_r($elm);
+			echo "</pre>";
 		}
 
 	}
