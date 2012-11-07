@@ -190,11 +190,11 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 				$data  = $this->data[$array]; // get our array of data
 				$tempTemplate = $e->innertext;
 
-				$pattern='\\{\\{[^{,},}]+\\}\\}';
+				$pattern = "/{{(.*?)}}/s";
 
 				$vars = array();
 				// preg_match_all($pattern, $tempTemplate,$vars);
-				preg_match_all ("/".$pattern."/is", $tempTemplate, $vars);
+				preg_match_all ($pattern, $tempTemplate, $vars);
 
 				$this->see($vars);
 			}
@@ -206,8 +206,8 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 		private function _showException($message){
 
 			echo	"<div style=\"margin: 10px auto; width: 960px; padding: 8px 35px 8px 14px;color: #C09853;background-color: #FCF8E3;border: 1px solid #FBEED5;\">";
-	        echo       "<h4 style=\"margin:0px;font-size:17.5px\">Warning!</h4>";
-	        echo      "<p style=\"margin: 0 0 10px;\">$message</p>";
+			echo       "<h4 style=\"margin:0px;font-size:17.5px\">Warning!</h4>";
+			echo      "<p style=\"margin: 0 0 10px;\">$message</p>";
 			echo	"</div>";
 		}
 
