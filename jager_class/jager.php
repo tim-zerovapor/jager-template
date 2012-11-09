@@ -20,32 +20,34 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 	class Engine{
 
 		const  DS  = DIRECTORY_SEPARATOR ;
-
 		/**
-		* template root folder
-		*@var string
-		*/
+		 * Root directory of our template
+		 * @var string
+		 */
 		public $templateRoot;
 
-		/** 
-		* Stores location of template file
-		* @var string
-		*/
+		/**
+		 * Template file to load
+		 * @var string
+		 */
 		public $templateFile;
 		
 		/**
-		 *Stores the contents of the template file
-		 *@var string
+		 *  Parsed  Template page
+		 * @var [type]
 		 */
 		private $_template;
 
-		/** 
-		* Stores the entries to be parsed into the template
-		* @var array
-		*/
+		/**
+		 * Holds all the data to be inserted into the template
+		 * @var array
+		 */
 		public $data = array();
 
-
+		/**
+		 * [__construct description]
+		 * @param string $templateRoot This is the root folder for your templates.
+		 */
 		public function __construct($templateRoot = null){
 
 			// define template rooot
@@ -54,14 +56,14 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 			}
 			else{ 
 				$this->templateRoot = getcwd();
-			}
+			} 
 		}
 
 
 		/**
-		* Loads template
-		*
-		*/
+		 * [_load_template description]
+		 * @return [type]
+		 */
 		private function _load_template(){
 			// todo load template
 			try{
@@ -104,12 +106,13 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 		*/
 		public function view($template, $data = false){
 
-				$this->templateFile = $template;
+			$this->templateFile = $template;
 
-				$this->_load_template();
-				$template = $this->_parseTemplate();
+			$this->_load_template();
 
-				return  $template;
+			$template = $this->_parseTemplate();
+
+			return  $template;
 		}
 
 		/**
@@ -118,18 +121,18 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 		*/
 		private function _parseTemplate(){
 
-			 // Create an alias of the template file property to save space
-	        $template = $this->_template;
+			// Create an alias of the template file property to save space
+			 $template = $this->_template;
 
-	        // first include anyfiles that need to be included.
-	        $template = str_get_html($template);
-	        $template = $this->_getincludes($template);
+			 // first include anyfiles that need to be included.
+			 $template = str_get_html($template);
+			 $template = $this->_getincludes($template);
 
-	        $template = $this->_replaceVars($template);// make sure this is last
-	        $template = $this->_foreach($template);// make sure this is last
+			 $template = $this->_replaceVars($template);// make sure this is last
+			 $template = $this->_foreach($template);// make sure this is last
 
-	        // $this->see($template);
-	         return $template;
+			 // $this->see($template);
+			 return $template;
 		}
 
 
@@ -140,11 +143,11 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 		*/
 		private function _getincludes($html){
 
-			$selector = '*[data-jager-include]';
+			$selector = '*[data-jte-include]';
 			$nth = 0;
 
 			foreach($html->find($selector) as $e){
-			      $file = $e->attr['data-jager-include'];
+			      $file = $e->attr['data-jte-include'];
 
 			      if($this->fileExistsCheck( $this->dirRoot.$file)){
 			      		$content = file_get_contents( $this->dirRoot.$file);
@@ -154,10 +157,8 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 			      }
 			      
 			      $nth++;
-			  	  // todo 
-			  	  // removal of jager tags.
-			  	  // $e->removeAttribute('data-jager-include');
-			  	  $e->attr['data-jager-include']="";
+			      	
+			  	  $e->attr['data-jte-include']="";
 			  	  
 			  }
 
@@ -167,36 +168,59 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 
 		private function _replaceVars($html){
 			$html = str_get_html($html);
-			$selector = '*[data-jager-var]';
+			$selector = '*[data-jte-var]';
 			$nth = 0; 
 
 			foreach($html->find($selector) as $e){
-				$var = $e->attr['data-jager-var'];
-				$html->find($selector,$nth)->innertext = $this->data[$var];
+				$var = $e->attr['data-jte-var'];
+				$e->innertext = $this->data[$var];
 			}
 
 			return $html;
 		}
 
+		/**
+		 * Parses an array then replaces values ( {{*}} ) that exisit in the template
+		 * @param  String $html  This should be a template file that you want to parse
+		 * @return  String      parsed HTML
+		 */
 		private function _foreach($html){
-			$selector = '*[data-jager-foreach]';
+			$selector = '*[data-jte-foreach]';
 			$nth = 0;
 			$temp_data; // holds temp template data.
 			
-
 			// get each foreach loop in the dom
 			foreach($html->find($selector) as $e){
-				$array = $e->attr['data-jager-foreach'];// get our array name
-				$data  = $this->data[$array]; // get our array of data
+				
+				$array = $e->attr['data-jte-foreach'];// get our array name
+				$entries  = $this->data[$array]; // get our array of data
 				$tempTemplate = $e->innertext;
+				$shell;
 
 				$pattern = "/{{(.*?)}}/s";
 
 				$vars = array();
-				// preg_match_all($pattern, $tempTemplate,$vars);
-				preg_match_all ($pattern, $tempTemplate, $vars);
 
-				$this->see($vars);
+				preg_match_all ($pattern, $tempTemplate, $vars);
+	
+				foreach($entries as $entry){
+
+					$temp = $tempTemplate;
+
+					foreach($entry as $k=>$v){
+						// get index 
+						$key = array_search($k, $vars[1]);
+						//  replace {{*}} in template
+						$temp = str_replace($vars[0][$key], $v, $temp);
+						
+					}	
+
+					$shell= $shell.$temp;
+					unset($temp);
+				}
+
+				$e->innertext = $shell;
+				unset($shell);
 			}
 
 			return $html;
@@ -215,7 +239,7 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 		// remove this 
 		// just used for dumping shit in a readible fashion
 		private function see($elm){
-			echo "<pre>";
+			echo"<pre>";
 			print_r($elm);
 			echo "</pre>";
 		}

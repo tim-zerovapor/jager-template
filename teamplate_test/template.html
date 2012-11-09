@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title data-jager-var="pagetitle">Place Holder Title</title>
+    <title data-jte-var="pagetitle">Place Holder Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -25,9 +25,11 @@
   </head>
 
   <body>
-
-    <div data-jager-include="navigation.html">
+   <div data-jte-include="navigation.html">
     </div>
+
+    
+ 
 
     <div class="container">
 
@@ -57,17 +59,27 @@
         </div>
       </div>
 
-      <div class="row" data-jager-foreach="entries">
+      <div class="row" data-jte-foreach="entries">
         <div class="span4">
           <h2>{{title}}</h2>
           <p>{{description}}</p>
+          <p>{{test}}</p>
           <p><a class="btn" href="#">View details &raquo;</a></p>
         </div>
       </div>
 
       <hr>
 
-    <footer data-jager-include="footer.html">
+      <div class="row" data-jte-foreach="downloads">
+        <div class="span4">
+          <h2>{{title}}</h2>
+          <p>{{description}}</p>
+          <p><a class="btn" href="#">{{download_text}} </a></p>
+        </div>
+      </div>
+
+
+    <footer data-jte-include="footer.html">
     </footer>
 
     </div> <!-- /container -->

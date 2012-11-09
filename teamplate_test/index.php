@@ -29,16 +29,35 @@ $jager->data['pagetitle'] = "Home | Jager Template Engine";
 $jager->data['entries'] = array(
 			array(
 				'title'=>'Entry 1',
-				'description' => "This is a fake description.1"
+				'description' => "This is a fake description.1",
+				'test'=> "this is a test "
 				),
 			array(
 				'title'=>'Entry 2',
 				'description' => "This is a fake description.2"
 				),
 			array(
-				'title'=>'Entry 2',
+				'title'=>'Entry 3',
 				'description' => "This is a fake description.3"
 				)
+	);
+
+$jager->data['downloads']= array(
+				array(
+					'title'=>'Super file 1 ',
+					'description' => "This is a fake description.1",
+					'download_text'=> "this is a test "
+					),
+				array(
+					'title'=>'Super file 2',
+					'description' => "This is a fake description.2",
+					'download_text' => "Get it now!!!"
+					),
+				array(
+					'title'=>'Super file 3',
+					'description' => "This is a fake description.3",
+					'download_text'=> 'download all the things'
+					)
 	);
 
 
