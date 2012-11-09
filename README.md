@@ -11,7 +11,7 @@ Jager Template Engine
 
 Simple example showing how to include a file
 ```html
-<footer  data-jager-include="footercontent.html"></footer>
+<footer  data-jte-include="footercontent.html"></footer>
 ```
 Footer template (footercontent.html)
 ```html
@@ -38,7 +38,7 @@ This is the output you would get
 ##Simple Variable Example 
 template example
 ```html
-<title data-jager-var="pagetitle">Place Holder Title</title>
+<title data-jte-var="pagetitle">Place Holder Title</title>
 ```
 template output
 ```html
