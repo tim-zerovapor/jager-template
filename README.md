@@ -44,3 +44,35 @@ template output
 ```html
 <title>Homepage</title>
 ```
+
+
+## Foreach
+Looping over an array
+```php
+$jager->data['entries'] = array(
+			array(
+				'title'=>'Entry 1',
+				'description' => "This is a fake description.1",
+				'test'=> "this is a test "
+				),
+			array(
+				'title'=>'Entry 2',
+				'description' => "This is a fake description.2"
+				),
+			array(
+				'title'=>'Entry 3',
+				'description' => "This is a fake description.3"
+				)
+	);
+```
+inside your template
+```html
+      <div class="row" data-jte-foreach="entries">
+        <div class="span4">
+          <h2>{{title}}</h2>  // notice  it will leave the tag {{*}} inplace if there is no value
+          <p>{{description}}</p>
+          <p>{{test}}</p>
+          <p><a class="btn" href="#">View details &raquo;</a></p>
+        </div>
+      </div>
+```

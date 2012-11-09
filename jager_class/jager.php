@@ -229,7 +229,7 @@ include('third_party/simplehtmldom/simple_html_dom.php');
 		// show usefull exceptions rather than just small text on a screen.
 		private function _showException($message){
 
-			echo	"<div style=\"margin: 10px auto; width: 960px; padding: 8px 35px 8px 14px;color: #C09853;background-color: #FCF8E3;border: 1px solid #FBEED5;\">";
+			echo	"<div style=\"margin: 10px auto; width: 100%; padding: 8px 35px 8px 14px;color: #C09853;background-color: #FCF8E3;border: 1px solid #FBEED5;\">";
 			echo       "<h4 style=\"margin:0px;font-size:17.5px\">Warning!</h4>";
 			echo      "<p style=\"margin: 0 0 10px;\">$message</p>";
 			echo	"</div>";
